@@ -4,6 +4,10 @@ const methodOverride = require('method-override')
 const bcrypt = require('bcryptjs')
 const bodyParser = require('body-parser')
 
+const db = require('./models')
+const User = db.User
+const Todo = db.Todo
+
 const app = express()
 
 app.engine('hbs', exphbs({ defaultLayout: 'main', extname: '.hbs' }))
@@ -28,7 +32,12 @@ app.get('/users/register', (req, res) => {
 })
 
 app.post('/users/register', (req, res) => {
-  res.send('register')
+  const { name, email, password, confirmPassword } = req.body
+  User.create({
+    name,
+    email,
+    password
+  }).then(() => res.redirect('/'))
 })
 
 app.get('/users/logout', (req, res) => {
